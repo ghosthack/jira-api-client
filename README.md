@@ -34,31 +34,39 @@ Documentation was scattered all over the internets
 --------------------------------------------------
 
 [1] SSL JIRA:
+
 http://confluence.atlassian.com/display/DOC/Connecting+to+LDAP+or+JIRA+or+Other+Services+via+SSL
 
 JIRA REST:
+
 http://docs.atlassian.com/jira/REST/latest/#id2474343
 
 JIRA RPC:
+
 https://developer.atlassian.com/display/JIRADEV/JIRA+JSON-RPC+Overview
 http://confluence.atlassian.com/display/JIRA043/Creating+a+XML-RPC+Client
 
 JIRA Issues
+
 http://confluence.atlassian.com/display/JIRACOM/Creating+Jira+Issues+Remotely
 
 JRJC jira-rest-java-client:
+
 https://plugins.atlassian.com/plugin/details/39474
 https://studio.atlassian.com/svn/JRJC/trunk/atlassian-jira-rest-java-client/
 
 JIRA REST OAuth (consumers setup)
+
 http://confluence.atlassian.com/display/JIRA042/Configuring+OAuth+Consumers
 http://confluence.atlassian.com/display/JIRA042/Configuring+OAuth
 http://confluence.atlassian.com/display/JIRA/Configuring+OAuth+Authentication+for+an+Application+Link
 
 Jersey OAuth:
+
 https://wikis.oracle.com/display/Jersey/OAuth
 
 JIRA SOAP
+
 http://confluence.atlassian.com/display/JIRA043/Creating+a+SOAP+Client
 
 
