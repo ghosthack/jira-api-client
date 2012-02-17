@@ -30,10 +30,10 @@ import com.sun.jersey.api.client.filter.LoggingFilter;
  */
 public class JiraJsonRestApiClient {
 
-    private static final String REST_API_LATEST = "/rest/api/latest";
-    private static final String PROJECT_RESOURCE = "project";
-    private static final String ISSUE_RESOURCE = "issue";
-    private WebResource br;
+    protected static final String REST_API_LATEST = "/rest/api/latest";
+    protected static final String PROJECT_RESOURCE = "project";
+    protected static final String ISSUE_RESOURCE = "issue";
+    protected WebResource br;
 
     public List<String> getWatchers(String issueKey)
             throws JiraJsonClientException {
@@ -145,23 +145,26 @@ public class JiraJsonRestApiClient {
 
     protected WebResource wr;
 
-    private void checkStatus(ClientResponse response, int checkStatus)
+    protected void checkStatus(ClientResponse response, int checkStatus)
             throws JiraJsonClientException {
         int status = response.getStatus();
         if (status != checkStatus)
             throw JiraJsonClientException.createResponseStatusException(status);
     }
 
-    private List<Project> readProject(InputStreamReader isr)
+    protected List<Project> readProject(InputStreamReader isr)
             throws IOException, JsonParseException, JsonMappingException {
         return mapper.readValue(isr, new TypeReference<List<Project>>() {
         });
     }
 
-    // Always assume UTF8
-    private static final Charset utf8Charset = Charset.forName("UTF-8");
+    public WebResource getWebResource() {
+        return wr;
+    }
+
+    protected static final Charset utf8Charset = Charset.forName("UTF-8");
 
     // Reusable Jackson Mapper
-    private static final ObjectMapper mapper = new ObjectMapper();
+    protected static final ObjectMapper mapper = new ObjectMapper();
 
 }

@@ -25,8 +25,8 @@ import com.sun.jersey.api.client.filter.LoggingFilter;
  */
 public class JiraJsonRpcApiClient {
 
-    private static final String GET_ISSUE = "getIssue";
-    private static final String CREATE_ISSUE = "createIssue";
+    protected static final String GET_ISSUE = "getIssue";
+    protected static final String CREATE_ISSUE = "createIssue";
     protected static final String ERROR = "error";
     protected static final String RPC_JSON_RPC_JIRASOAPSERVICE_V2 = "/rpc/json-rpc/jirasoapservice-v2";
     protected static final String JSON_RPC_2_0 = "2.0";
@@ -155,9 +155,12 @@ public class JiraJsonRpcApiClient {
         this(Client.create(config), base);
     }
 
+    public WebResource getWebResource() {
+        return wr;
+    }
+
     protected WebResource wr;
 
-    // Reusable Jackson Mapper
     protected final ObjectMapper mapper = new ObjectMapper();
 
     // Always assume UTF8
