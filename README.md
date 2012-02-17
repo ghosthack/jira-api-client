@@ -11,6 +11,25 @@ Available options in Java didn't work out of the box or documentation was outdat
 Some extra work with keytool [1] was required with atlassian-jira-rest-java-client. Also Jersey Config wasn't exposed on the Jersey implementation.
 
 
+Using
+-----
+
+JSON-RPC:
+
+    // instantiate (optionally pass a Jersey Config)
+    client = new JiraJsonRpcApiClient("http://localhost:8080");
+    // login
+    token = client.login("admin", "admin");
+    // create an issue
+    client.createIssue(token, new Issue());
+
+JSON ReST:
+
+    // instantiate (optionals Jersey Config, user/pass, etc.)
+    client = new JiraJsonRestApiClient("http://localhost:8080");
+    List<Project> projects = client.getProjects();
+    
+
 Documentation was scattered all over the internets
 --------------------------------------------------
 
