@@ -6,9 +6,9 @@ JIRA JSON API Client (ReST and RPC)
 
 Why?
 
-Available options in Java didn't work out of the box or documentation was outdated too hard to find.
+Available options in Java didn't work out of the box or documentation was outdated / too hard to find.
 
-Some extra work with keytool [1] was required with atlassian-jira-rest-java-client. Also Jerysey Config wasn't exposed on the Jersey implementation.
+Some extra work with keytool [1] was required with atlassian-jira-rest-java-client. Also Jersey Config wasn't exposed on the Jersey implementation.
 
 
 Documentation was scattered all over the internets
