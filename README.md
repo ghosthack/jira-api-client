@@ -95,6 +95,8 @@ Extra dependencies:
 
 Plugin block:
 
+Replce url to a jira url, and packageSpace with any java package name. 
+
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>axistools-maven-plugin</artifactId>
