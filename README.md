@@ -1,118 +1,161 @@
-JIRA JSON API Client (ReST and RPC)
------------------------------------
+# JIRA JSON API Client
 
-* JIRA API JSON-RPC Client for the transition between 4.x to 5.x.
-* JIRA API JSON REST Client.
+A lightweight Java client library for the JIRA JSON API, supporting both **REST** and **JSON-RPC 2.0** protocols.
 
-Why?
+The JSON-RPC client covers the transition period between JIRA 4.x and 5.x. The REST client targets the modern JIRA REST API (`/rest/api/latest`).
 
-Available options in Java didn't work out of the box or documentation was outdated / too hard to find.
+## Why?
 
-Some extra work with keytool [1] was required with atlassian-jira-rest-java-client. Also Jersey Config wasn't exposed on the Jersey implementation.
+Available Java options at the time didn't work out of the box, or their documentation was outdated and hard to find. The official `atlassian-jira-rest-java-client` required extra `keytool` work for SSL and didn't expose the underlying Jersey configuration.
 
+This library gives you direct, simple access to JIRA's JSON APIs with full control over the Jersey client configuration.
 
-Using
------
+## Requirements
 
-JSON-RPC:
+- Java 8+
+- Maven 3.x
 
-    // instantiate (optionally pass a Jersey Config)
-    client = new JiraJsonRpcApiClient("http://localhost:8080");
-    // login
-    token = client.login("admin", "admin");
-    // create an issue
-    client.createIssue(token, new Issue());
+## Installation
 
-JSON ReST:
+Add the dependency to your `pom.xml`:
 
-    // instantiate (optionals Jersey Config, user/pass, etc.)
-    client = new JiraJsonRestApiClient("http://localhost:8080");
-    List<Project> projects = client.getProjects();
-    
+```xml
+<dependency>
+  <groupId>com.ghosthack</groupId>
+  <artifactId>jira-json-client</artifactId>
+  <version>2.0.0</version>
+</dependency>
+```
 
-Documentation was scattered all over the internets
---------------------------------------------------
+Or build from source:
 
-[1] SSL JIRA:
+```bash
+git clone https://github.com/ghosthack/jira-api-client.git
+cd jira-api-client
+mvn clean package
+```
 
-http://confluence.atlassian.com/display/DOC/Connecting+to+LDAP+or+JIRA+or+Other+Services+via+SSL
+## Usage
 
-JIRA REST:
+### REST API Client
 
-http://docs.atlassian.com/jira/REST/latest/#id2474343
+```java
+// Basic authentication
+JiraJsonRestApiClient client = new JiraJsonRestApiClient(
+    "https://jira.example.com", "username", "password");
 
-JIRA RPC:
+// List all projects
+List<Project> projects = client.getProjects();
 
-https://developer.atlassian.com/display/JIRADEV/JIRA+JSON-RPC+Overview
-http://confluence.atlassian.com/display/JIRA043/Creating+a+XML-RPC+Client
+// Create and post an issue
+Issue issue = client.buildIssue("PROJ", "Bug", "Login broken", "Cannot log in with SSO");
+Map<String, Object> response = client.postIssue(issue);
 
-JIRA Issues
+// Get watchers for an issue
+List<String> watchers = client.getWatchers("PROJ-123");
 
-http://confluence.atlassian.com/display/JIRACOM/Creating+Jira+Issues+Remotely
+// Add a watcher
+client.postWatchers("PROJ-123", "jdoe");
+```
 
-JRJC jira-rest-java-client:
+### JSON-RPC Client
 
-https://plugins.atlassian.com/plugin/details/39474
-https://studio.atlassian.com/svn/JRJC/trunk/atlassian-jira-rest-java-client/
+```java
+// Create client (optionally pass a Jersey ClientConfig)
+JiraJsonRpcApiClient client = new JiraJsonRpcApiClient("https://jira.example.com");
 
-JIRA REST OAuth (consumers setup)
+// Authenticate
+String token = client.login("admin", "password");
 
-http://confluence.atlassian.com/display/JIRA042/Configuring+OAuth+Consumers
-http://confluence.atlassian.com/display/JIRA042/Configuring+OAuth
-http://confluence.atlassian.com/display/JIRA/Configuring+OAuth+Authentication+for+an+Application+Link
+// Get an issue
+Map<String, Object> issue = client.getIssue(token, "PROJ-123");
 
-Jersey OAuth:
+// Create an issue
+Issue newIssue = new Issue("PROJ", 1, "Summary", "Description");
+Map<String, Object> created = client.createIssue(token, newIssue);
+```
 
-https://wikis.oracle.com/display/Jersey/OAuth
+### Custom Jersey Configuration
 
-JIRA SOAP
+Both clients accept a Jersey `ClientConfig` for advanced configuration:
 
-http://confluence.atlassian.com/display/JIRA043/Creating+a+SOAP+Client
+```java
+ClientConfig config = new DefaultClientConfig();
+// customize config...
 
+JiraJsonRestApiClient client = new JiraJsonRestApiClient(
+    "https://jira.example.com", config, "user", "pass");
+```
 
-SOAP client generation plugin for Maven
----------------------------------------
+### SSL Certificate Bypass (Development Only)
 
-If JSON clients fail, fall back to SOAP:
+For development environments with self-signed certificates:
 
-Extra dependencies:
+```java
+import com.ghosthack.jira.json.client.util.JerseyCertificateIgnoreBlackMagic;
 
-    <dependency>
-      <groupId>axis</groupId>
-      <artifactId>axis-jaxrpc</artifactId>
-      <version>1.3</version>
-    </dependency>
-    <dependency>
-      <groupId>axis</groupId>
-      <artifactId>axis-saaj</artifactId>
-      <version>1.3</version>
-    </dependency>
-    <dependency>
-      <groupId>axis</groupId>
-      <artifactId>axis</artifactId>
-      <version>1.3</version>
-    </dependency>
+ClientConfig config = JerseyCertificateIgnoreBlackMagic.ignoreCertConfig();
+JiraJsonRestApiClient client = new JiraJsonRestApiClient(
+    "https://localhost:8443", config, "admin", "admin");
+```
 
-Plugin block:
+> **Warning:** This disables all SSL certificate validation. Never use in production.
 
-Replace url with a JIRA url, and packageSpace with any Java package name. 
+## Project Structure
 
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>axistools-maven-plugin</artifactId>
-        <version>1.3</version>
-        <configuration>
-          <urls>
-            <url>http://localhost:8080/rpc/soap/jirasoapservice-v2?wsdl</url>
-          </urls>
-          <packageSpace>com.ghosthack.jira.soap.client</packageSpace>
-        </configuration>
-        <executions>
-          <execution>
-            <goals>
-              <goal>wsdl2java</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
+```
+src/main/java/com/ghosthack/jira/json/client/
+  AbstractJiraApiClient.java          -- Shared base class
+  JiraJsonRestApiClient.java          -- REST API client
+  JiraJsonRpcApiClient.java           -- JSON-RPC 2.0 client
+  JiraJsonClientException.java        -- Client exception type
+  model/
+    rest/                             -- REST API models
+      Issue.java, IssueFields.java, IssueTypeName.java,
+      Login.java, Project.java, ProjectKey.java,
+      Watcher.java, Watchers.java
+    rpc/                              -- JSON-RPC models
+      Issue.java, RpcParam.java, RpcRequest.java, RpcString.java
+  util/
+    CertificateIgnoreBlackMagic.java  -- SSL bypass utility
+    JerseyCertificateIgnoreBlackMagic.java -- Jersey SSL config
+```
 
+## Building and Testing
+
+```bash
+# Compile
+mvn clean compile
+
+# Run tests
+mvn test
+
+# Package as JAR
+mvn package
+
+# Package as fat JAR with dependencies
+mvn assembly:single
+```
+
+## Dependencies
+
+| Dependency | Version | Purpose |
+|---|---|---|
+| Jersey Client | 1.19.4 | HTTP/REST transport |
+| Jersey Apache Client | 1.19.4 | Apache HTTP connector |
+| Jackson Databind | 2.15.3 | JSON serialization |
+| Jackson Annotations | 2.15.3 | JSON annotations |
+
+Test dependencies: JUnit 4.13.2, Mockito 4.11.0
+
+## References
+
+- [JIRA REST API Documentation](https://docs.atlassian.com/jira/REST/latest/)
+- [JIRA JSON-RPC Overview](https://developer.atlassian.com/display/JIRADEV/JIRA+JSON-RPC+Overview)
+- [Connecting to Services via SSL](https://confluence.atlassian.com/display/DOC/Connecting+to+LDAP+or+JIRA+or+Other+Services+via+SSL)
+- [JIRA REST OAuth Configuration](https://confluence.atlassian.com/display/JIRA/Configuring+OAuth+Authentication+for+an+Application+Link)
+- [Jersey OAuth](https://wikis.oracle.com/display/Jersey/OAuth)
+
+## License
+
+See repository for license details.
