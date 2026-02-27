@@ -95,7 +95,7 @@ Extra dependencies:
 
 Plugin block:
 
-Replce url to a jira url, and packageSpace with any java package name. 
+Replace url with a JIRA url, and packageSpace with any Java package name. 
 
       <plugin>
         <groupId>org.codehaus.mojo</groupId>

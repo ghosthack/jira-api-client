@@ -1,11 +1,26 @@
 package com.ghosthack.jira.json.client.model.rpc;
 
+import java.util.Arrays;
+
+/**
+ * Represents a JSON-RPC 2.0 request.
+ */
 public class RpcRequest {
 
-    protected String jsonrpc;
-    protected String method;
-    protected RpcParam[] params;
-    protected long id;
+    private String jsonrpc;
+    private String method;
+    private RpcParam[] params;
+    private long id;
+
+    public RpcRequest() {
+    }
+
+    public RpcRequest(String jsonrpc, String method, RpcParam[] params, long id) {
+        this.jsonrpc = jsonrpc;
+        this.method = method;
+        this.params = params;
+        this.id = id;
+    }
 
     public String getJsonrpc() {
         return jsonrpc;
@@ -39,4 +54,11 @@ public class RpcRequest {
         this.id = id;
     }
 
+    @Override
+    public String toString() {
+        return "RpcRequest{jsonrpc='" + jsonrpc + "'"
+                + ", method='" + method + "'"
+                + ", id=" + id
+                + ", params=" + Arrays.toString(params) + "}";
+    }
 }

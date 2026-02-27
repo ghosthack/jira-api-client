@@ -1,17 +1,19 @@
 package com.ghosthack.jira.json.client.model.rpc;
 
-import org.codehaus.jackson.annotate.JsonValue;
+import com.fasterxml.jackson.annotation.JsonValue;
 
+/**
+ * A JSON-RPC parameter that serializes as a bare string value.
+ */
 public class RpcString extends RpcParam {
 
-    protected String value;
+    private String value;
 
     public RpcString() {
-        // TODO Auto-generated constructor stub
     }
 
-    public RpcString(String user) {
-        setValue(user);
+    public RpcString(String value) {
+        this.value = value;
     }
 
     @JsonValue
@@ -23,4 +25,8 @@ public class RpcString extends RpcParam {
         this.value = value;
     }
 
+    @Override
+    public String toString() {
+        return "RpcString{value='" + value + "'}";
+    }
 }

@@ -2,12 +2,21 @@ package com.ghosthack.jira.json.client.model.rest;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+/**
+ * Represents the watchers response for a JIRA issue.
+ */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Watchers {
 
-    public String self;
-    public boolean isWatching;
-    public int watchCount;
-    public List<Watcher> watchers;
+    private String self;
+    private boolean isWatching;
+    private int watchCount;
+    private List<Watcher> watchers;
+
+    public Watchers() {
+    }
 
     public String getSelf() {
         return self;
@@ -41,4 +50,9 @@ public class Watchers {
         this.watchers = watchers;
     }
 
+    @Override
+    public String toString() {
+        return "Watchers{watchCount=" + watchCount
+                + ", isWatching=" + isWatching + "}";
+    }
 }

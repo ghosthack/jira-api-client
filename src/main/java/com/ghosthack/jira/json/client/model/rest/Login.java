@@ -1,9 +1,23 @@
 package com.ghosthack.jira.json.client.model.rest;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+/**
+ * Represents JIRA login credentials for the REST API.
+ */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Login {
 
-    public String username;
-    public String password;
+    private String username;
+    private String password;
+
+    public Login() {
+    }
+
+    public Login(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
 
     public String getUsername() {
         return username;
@@ -21,4 +35,8 @@ public class Login {
         this.password = password;
     }
 
+    @Override
+    public String toString() {
+        return "Login{username='" + username + "'}";
+    }
 }

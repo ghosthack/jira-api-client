@@ -1,11 +1,20 @@
 package com.ghosthack.jira.json.client.model.rest;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+/**
+ * Represents a JIRA issue watcher.
+ */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Watcher {
 
-    public String self;
-    public String name;
-    public String displayName;
-    public boolean active;
+    private String self;
+    private String name;
+    private String displayName;
+    private boolean active;
+
+    public Watcher() {
+    }
 
     public String getSelf() {
         return self;
@@ -39,4 +48,9 @@ public class Watcher {
         this.active = active;
     }
 
+    @Override
+    public String toString() {
+        return "Watcher{name='" + name + "', displayName='" + displayName
+                + "', active=" + active + "}";
+    }
 }

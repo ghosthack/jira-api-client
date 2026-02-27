@@ -1,0 +1,21 @@
+# Build output
+target/
+
+# IDE files
+.idea/
+*.iml
+.project
+.classpath
+.settings/
+*.swp
+*.swo
+*~
+
+# macOS
+.DS_Store
+
+# Logs
+*.log
+
+# Environment
+.env

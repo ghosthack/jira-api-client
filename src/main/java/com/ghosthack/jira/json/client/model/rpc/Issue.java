@@ -1,23 +1,29 @@
 package com.ghosthack.jira.json.client.model.rpc;
 
+/**
+ * Represents a JIRA issue for the JSON-RPC API.
+ */
 public class Issue extends RpcParam {
 
-    protected String description;
-    protected String project;
-    protected String summary;
-    protected int type;
-    protected String duedate;
+    private String description;
+    private String project;
+    private String summary;
+    private int type;
+    private String duedate;
 
     public Issue() {
-        // TODO Auto-generated constructor stub
     }
 
     public Issue(String project, int type, String summary, String description) {
-        super();
         this.project = project;
         this.type = type;
         this.summary = summary;
         this.description = description;
+    }
+
+    public Issue(String project, int type, String summary, String description, String duedate) {
+        this(project, type, summary, description);
+        this.duedate = duedate;
     }
 
     public String getDescription() {
@@ -52,4 +58,19 @@ public class Issue extends RpcParam {
         this.type = type;
     }
 
+    public String getDuedate() {
+        return duedate;
+    }
+
+    public void setDuedate(String duedate) {
+        this.duedate = duedate;
+    }
+
+    @Override
+    public String toString() {
+        return "Issue{project='" + project + "'"
+                + ", type=" + type
+                + ", summary='" + summary + "'"
+                + ", duedate='" + duedate + "'}";
+    }
 }
